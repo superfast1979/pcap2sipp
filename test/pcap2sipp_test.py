@@ -4,7 +4,7 @@ Created on 5 giu 2020
 @author: augello
 '''
 import unittest
-
+from context import pcap2sipp
 
 class Test(unittest.TestCase):
 
