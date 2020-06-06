@@ -8,6 +8,4 @@ Read from a pcap file all sip messages between two peers, identified from ip_src
 ### Usage
 python /path/to/pcap2sipp/pcap2sipp -i /path/to/pcap_file.pcap -o /path/to/sipp_file.xml -ip_src 138.132.111.49 -ip_dst 138.132.112.79
 
-update password
-
 
