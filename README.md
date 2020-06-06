@@ -11,4 +11,3 @@ python /path/to/pcap2sipp/pcap2sipp -i /path/to/pcap_file.pcap -o /path/to/sipp_
 update password
 
 
-
