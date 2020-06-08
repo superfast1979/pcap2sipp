@@ -7,11 +7,5 @@ python:
 install:
   - which python
 
-#before_script:
-#  - export PYTHONPATH="./src:./test:$PYTHONPATH"
-
 script:
-  - echo $PYTHONPATH
-  - pwd
-  - ls
-  - python -u ./test/pcap2sipp_test.py
+  - python -u ./tests/pcap2sipp_test.py
