@@ -20,5 +20,7 @@ setup(
     author_email='marco.augello@gmail.com',
     url='https://github.com/superfast1979/pcap2sipp',
     license=license,
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
     packages=find_packages(exclude=('tests', 'docs'))
 )

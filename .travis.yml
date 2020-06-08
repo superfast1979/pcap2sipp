@@ -9,3 +9,4 @@ install:
 
 script:
   - python -u ./tests/pcap2sipp_test.py
+  - python setup.py test
