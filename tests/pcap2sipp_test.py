@@ -32,9 +32,14 @@ class Test(unittest.TestCase):
                 pcap2sipp.handleArguments()
         self.assertEqual(se.exception.code, 2)
     
-    def testName2(self):
-        pass
-
+    def testName_completeArgs(self):
+        testargs = ["pcap2sipp", "pippo.pcap", "/tmp", "138.132.1.1", "1.1.1.1"]
+        with patch('sys.argv', testargs):
+            try:
+                pcap2sipp.handleArguments()
+            except:
+                pytest.fail("no exception expected")
+                pcap2sipp.handleArguments()
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
