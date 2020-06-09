@@ -6,22 +6,31 @@ Created on 5 giu 2020
 import unittest
 from context import pcap2sipp
 
+try:
+    # python 3.4+ should use builtin unittest.mock not mock package
+    from unittest.mock import patch
+except ImportError:
+    from mock import patch
+    
 class Test(unittest.TestCase):
-
 
     def setUp(self):
         pass
 
-
     def tearDown(self):
         pass
 
-
-    def testName(self):
-        pass
+    def testName_noArgs(self):
+        with self.assertRaises(SystemExit) as se:
+            pcap2sipp.handleArguments()
+        self.assertEqual(se.exception.code, 2)
     
-    def testName1(self):
-        pass
+    def testName_incompleteArgs(self):
+        testargs = ["pcap2sipp", "pippo.pcap", "/tmp"]
+        with patch('sys.argv', testargs):
+            with self.assertRaises(SystemExit) as se:
+                pcap2sipp.handleArguments()
+        self.assertEqual(se.exception.code, 2)
     
     def testName2(self):
         pass

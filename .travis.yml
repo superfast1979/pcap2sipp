@@ -8,6 +8,7 @@ install:
   - which python
   - pip install codecov
   - pip install pytest pytest-cov
+  - pip install mock
 
 script:
   - python -u ./tests/pcap2sipp_test.py
