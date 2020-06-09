@@ -6,6 +6,10 @@ python:
  
 install:
   - which python
+  - pip install --user codecov
+
+after_success:
+  - codecov
 
 script:
   - python -u ./tests/pcap2sipp_test.py
