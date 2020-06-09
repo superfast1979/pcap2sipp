@@ -1,0 +1,6 @@
+[run]
+omit =
+    # omit anything in a .local directory anywhere
+    tests/*
+    # omit this single file
+    pcap2sipp/__init__.py
