@@ -29,7 +29,7 @@ pcap2sipp:
 
 Usage
 ------------
-python /path/to/pcap2sipp/pcap2sipp -i /path/to/pcap_file.pcap -o /path/to/sipp_files/ -ip_src 138.132.111.49 -ip_dst 138.132.112.79
+python /path/to/pcap2sipp/pcap2sipp pcap /path/to/pcap_file.pcap path /path/to/sipp_files/ src 138.132.111.49 dst 138.132.112.79
 
 License
 -------
