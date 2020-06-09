@@ -22,8 +22,10 @@ Requirements
 pcap2sipp:
 
   * [Python][python2] 2.7+
+  * [Scapy][scapy] 2
 
 [python2]: https://www.python.org/download/releases/2.7/
+[scapy]: https://scapy.readthedocs.io/en/latest/index.html
 
 Usage
 ------------

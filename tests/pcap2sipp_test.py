@@ -22,6 +22,9 @@ class Test(unittest.TestCase):
     
     def testName1(self):
         pass
+    
+    def testName2(self):
+        pass
 
 
 if __name__ == "__main__":
