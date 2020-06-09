@@ -2,10 +2,10 @@ import argparse
 
 
 def printArgs(args):
-    print "pcap %s" % (args.pcap)
-    print "output %s" % (args.path)
-    print "ip_src %s" % (args.src)
-    print "ip_dst %s" % (args.dst)
+    print("pcap %s" % (args.pcap))
+    print("output %s" % (args.path))
+    print("ip_src %s" % (args.src))
+    print("ip_dst %s" % (args.dst))
     
 def handleArguments():
     parser = argparse.ArgumentParser(prog="pcap2sipp.py", description="pcap file to sipp scenarios")
