@@ -32,7 +32,7 @@ python /path/to/pcap2sipp/pcap2sipp -i /path/to/pcap_file.pcap -o /path/to/sipp_
 License
 -------
 
-Paddington is licensed under the [GPL](#) license.
+pcap2sipp is licensed under the [GPL](#) license.
 Copyright &copy; 2020, Augello Marco
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
