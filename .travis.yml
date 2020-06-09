@@ -7,10 +7,12 @@ python:
 install:
   - which python
   - pip install codecov
-
-after_success:
-  - codecov
+  - pip install pytest pytest-cov
 
 script:
   - python -u ./tests/pcap2sipp_test.py
+  - pytest --cov=./ ./tests/pcap2sipp_test.py
   - python setup.py test
+  
+after_success:
+  - codecov
