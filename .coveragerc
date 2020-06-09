@@ -4,3 +4,5 @@ omit =
     tests/*
     # omit this single file
     pcap2sipp/__init__.py
+    # omit this single file
+    setup.py
