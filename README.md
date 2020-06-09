@@ -1,7 +1,6 @@
 [![Build status](https://api.travis-ci.org/superfast1979/pcap2sipp.svg?branch=master)](https://travis-ci.org/superfast1979)
 
-[![License: GPL v3]]
-(https://www.gnu.org/licenses/gpl-3.0)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # pcap2sipp
 Simple purpose: translate pcap sip messages to sipp call flow.
