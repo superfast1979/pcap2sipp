@@ -6,7 +6,7 @@ python:
  
 install:
   - which python
-  - pip install --user codecov
+  - pip install codecov
 
 after_success:
   - codecov
