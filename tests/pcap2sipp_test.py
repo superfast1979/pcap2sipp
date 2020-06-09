@@ -20,26 +20,30 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testName_noArgs(self):
+    def test_handleArguments_no_args(self):
         with self.assertRaises(SystemExit) as se:
             pcap2sipp.handleArguments()
         self.assertEqual(se.exception.code, 2)
     
-    def testName_incompleteArgs(self):
+    def test_handleArguments_incomplete_args(self):
         testargs = ["pcap2sipp", "pippo.pcap", "/tmp"]
         with patch('sys.argv', testargs):
             with self.assertRaises(SystemExit) as se:
                 pcap2sipp.handleArguments()
         self.assertEqual(se.exception.code, 2)
     
-    def testName_completeArgs(self):
+    def test_handleArguments_complete_args(self):
         testargs = ["pcap2sipp", "pippo.pcap", "/tmp", "138.132.1.1", "1.1.1.1"]
         with patch('sys.argv', testargs):
             try:
-                pcap2sipp.handleArguments()
+                args = pcap2sipp.handleArguments()
             except:
                 pytest.fail("no exception expected")
                 pcap2sipp.handleArguments()
+        self.assertEqual(args.pcap, "pippo.pcap")
+        self.assertEqual(args.path, "/tmp")
+        self.assertEqual(args.src, "138.132.1.1")
+        self.assertEqual(args.dst, "1.1.1.1")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
