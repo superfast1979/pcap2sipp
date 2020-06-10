@@ -53,13 +53,13 @@ class Test(unittest.TestCase):
         self.args['pcap'] = './file_not_exists.pcap'
         with self.assertRaises(Exception) as e:
             pcap2sipp.checkArgs(self.args)
-        self.assertEqual(e.exception.message, "no pcap found")
+        self.assertEqual(str(e.exception), "no pcap found")
         
     def test_checkArgs_path_is_not_dir(self):
         self.args['path'] = '/nodirexists/'
         with self.assertRaises(Exception) as e:
             pcap2sipp.checkArgs(self.args)
-        self.assertEqual(e.exception.message, "path not found")
+        self.assertEqual(str(e.exception), "path not found")
         
     def test_checkArgs_src_is_not_valid_ipv4(self):
         self.args['src'] = '1.0.1.2.3'
