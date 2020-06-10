@@ -10,6 +10,8 @@ install:
   - pip install pytest pytest-cov
   - pip install mock
   - pip install ipaddress
+  - pwd
+  - ls -ltr tests/*
 
 script:
   - python -u ./tests/pcap2sipp_test.py
