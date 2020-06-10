@@ -4,6 +4,7 @@ Created on 5 giu 2020
 @author: augello
 '''
 import unittest
+import argparse
 from context import pcap2sipp
 
 try:
@@ -15,7 +16,11 @@ except ImportError:
 class Test(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.args = dict()
+        self.args['path'] = './'
+        self.args['pcap'] = './example.pcap'
+        self.args['src'] = '1.1.1.1'
+        self.args['dst'] = '138.132.1.1'
 
     def tearDown(self):
         pass
@@ -39,11 +44,38 @@ class Test(unittest.TestCase):
                 args = pcap2sipp.handleArguments()
             except:
                 pytest.fail("no exception expected")
-                pcap2sipp.handleArguments()
         self.assertEqual(args.pcap, "pippo.pcap")
         self.assertEqual(args.path, "/tmp")
         self.assertEqual(args.src, "138.132.1.1")
         self.assertEqual(args.dst, "1.1.1.1")
+        
+    def test_checkArgs_pcap_not_found(self):
+        self.args['pcap'] = './file_not_exists.pcap'
+        with self.assertRaises(Exception) as e:
+            pcap2sipp.checkArgs(self.args)
+        self.assertEqual(e.exception.message, "no pcap found")
+        
+    def test_checkArgs_path_is_not_dir(self):
+        self.args['path'] = '/nodirexists/'
+        with self.assertRaises(Exception) as e:
+            pcap2sipp.checkArgs(self.args)
+        self.assertEqual(e.exception.message, "path not found")
+        
+    def test_checkArgs_src_is_not_valid_ipv4(self):
+        self.args['src'] = '1.0.1.2.3'
+        with self.assertRaises(ValueError):
+            pcap2sipp.checkArgs(self.args)
+
+    def test_checkArgs_dst_is_not_valid_ipv4(self):
+        self.args['dst'] = '1.0.1.2.3'
+        with self.assertRaises(ValueError):
+            pcap2sipp.checkArgs(self.args)
+            
+    def test_checkArgs_valid_arguments(self):
+        try:
+            pcap2sipp.checkArgs(self.args)
+        except:
+            pytest.fail("no exception expected")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
