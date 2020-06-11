@@ -5,7 +5,6 @@ Created on 5 giu 2020
 '''
 import unittest
 from context import pcap2sipp
-from __builtin__ import True
 
 try:
     # python 3.4+ should use builtin unittest.mock not mock package
