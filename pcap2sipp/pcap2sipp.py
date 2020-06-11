@@ -15,6 +15,8 @@ def handleArguments():
 def checkArgs(args):
     if not os.path.isdir(args['path']):
         raise Exception("path not found")
+    if not os.path.isfile(args['pcap']):
+        raise Exception("no pcap found")
     try:
         IP(args['src'])
     except:
@@ -23,8 +25,6 @@ def checkArgs(args):
         IP(args['dst'])
     except:
         raise Exception("dst not a valid ip")
-    if not os.path.isfile(args['pcap']):
-        raise Exception("no pcap found")
 
 if __name__ == '__main__':
     args = handleArguments()
