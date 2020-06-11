@@ -63,13 +63,15 @@ class Test(unittest.TestCase):
         
     def test_checkArgs_src_is_not_valid_ipv4(self):
         self.args['src'] = '1.0.1.2.3'
-        with self.assertRaises(ValueError):
+        with self.assertRaises(Exception) as e:
             pcap2sipp.checkArgs(self.args)
+        self.assertEqual(str(e.exception), "src not a valid ip")
 
     def test_checkArgs_dst_is_not_valid_ipv4(self):
         self.args['dst'] = '1.0.1.2.3'
-        with self.assertRaises(ValueError):
+        with self.assertRaises(Exception) as e:
             pcap2sipp.checkArgs(self.args)
+        self.assertEqual(str(e.exception), "dst not a valid ip")
             
     def test_checkArgs_valid_arguments(self):
         try:

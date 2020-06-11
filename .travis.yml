@@ -9,9 +9,7 @@ install:
   - pip install codecov
   - pip install pytest pytest-cov
   - pip install mock
-  - pip install ipaddress
-  - pwd
-  - ls -ltr tests/*
+  - pip install IPy
 
 script:
   - python -u ./tests/pcap2sipp_test.py
