@@ -5,6 +5,7 @@ Created on 5 giu 2020
 '''
 import unittest
 from context import pcap2sipp
+from __builtin__ import True
 
 try:
     # python 3.4+ should use builtin unittest.mock not mock package
@@ -61,7 +62,7 @@ class Test(unittest.TestCase):
         with self.assertRaises(Exception) as e:
             pcap2sipp.checkArgs(self.args)
         self.assertEqual(str(e.exception), "path not found")
-        
+
     def test_checkArgs_src_is_not_valid_ipv4(self):
         self.args['src'] = '1.0.1.2.3'
         with self.assertRaises(Exception) as e:
@@ -73,8 +74,12 @@ class Test(unittest.TestCase):
         with self.assertRaises(Exception) as e:
             pcap2sipp.checkArgs(self.args)
         self.assertEqual(str(e.exception), "dst not a valid ip")
-            
-    def test_checkArgs_valid_arguments(self):
+
+    @patch('os.path.isdir')
+    @patch('os.path.isfile')
+    def test_checkArgs_valid_arguments(self, mock_os_isdir, mock_os_isfile):
+        mock_os_isdir.return_value = True
+        mock_os_isfile.return_value = True
         try:
             pcap2sipp.checkArgs(self.args)
         except:
