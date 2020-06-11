@@ -4,7 +4,6 @@ Created on 5 giu 2020
 @author: augello
 '''
 import unittest
-import argparse
 from context import pcap2sipp
 
 try:
