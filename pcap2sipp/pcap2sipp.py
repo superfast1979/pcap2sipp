@@ -12,19 +12,25 @@ def handleArguments():
     args = parser.parse_args()
     return args
 
-def checkArgs(args):
-    if not os.path.isdir(args['path']):
+def checkPath(path):
+    if not os.path.isdir(path):
         raise Exception("path not found")
-    if not os.path.isfile(args['pcap']):
-        raise Exception("no pcap found")
+    
+def checkPcap(pcap):
+    if not os.path.isdir(pcap):
+        raise Exception("pcap not found")
+    
+def checkIp(ip):
     try:
-        IP(args['src'])
+        IP(ip)
     except:
-        raise Exception("src not a valid ip")
-    try:
-        IP(args['dst'])
-    except:
-        raise Exception("dst not a valid ip")
+        raise Exception("%s not a valid ip" % (ip))
+
+def checkArgs(args):
+    checkPath(args['path'])
+    checkPcap(args['pcap'])
+    checkIp(args['src'])
+    checkIp(args['dst'])
 
 if __name__ == '__main__':
     args = handleArguments()
