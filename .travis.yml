@@ -12,8 +12,8 @@ install:
   - pip install IPy
 
 script:
-  - python -u ./tests/pcap2sipp_test.py
-  - pytest --cov=./ ./tests/pcap2sipp_test.py
+  - python -u ./tests/*_test.py
+  - pytest --cov=./ ./tests/*_test.py
   - python setup.py test
   
 after_success:
