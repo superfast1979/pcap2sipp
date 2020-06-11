@@ -12,7 +12,6 @@ install:
   - pip install IPy
 
 script:
-  - python -u ./tests/*_test.py
   - pytest --cov=./ ./tests/*_test.py
   - python setup.py test
   
