@@ -47,15 +47,17 @@ class Test(unittest.TestCase):
         self.assertEqual(args.path, "/tmp")
         self.assertEqual(args.src, "138.132.1.1")
         self.assertEqual(args.dst, "1.1.1.1")
-        
-    def test_checkArgs_pcap_not_found(self):
-        self.args['pcap'] = './file_not_exists.pcap'
+    
+    @patch('os.path.isfile')
+    def test_checkArgs_pcap_not_found(self, mock_os_is_file):
+        mock_os_is_file.return_value =  False
         with self.assertRaises(Exception) as e:
             pcap2sipp.checkArgs(self.args)
         self.assertEqual(str(e.exception), "no pcap found")
         
-    def test_checkArgs_path_is_not_dir(self):
-        self.args['path'] = '/nodirexists/'
+    @patch('os.path.isdir')
+    def test_checkArgs_path_is_not_dir(self, mock_os_is_dir):
+        mock_os_is_dir.return_value = False
         with self.assertRaises(Exception) as e:
             pcap2sipp.checkArgs(self.args)
         self.assertEqual(str(e.exception), "path not found")
