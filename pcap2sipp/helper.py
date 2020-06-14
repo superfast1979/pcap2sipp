@@ -32,9 +32,9 @@ def checkArgs(args):
     checkPcap(args['pcap'])
 
 def parsePcap(pcap):
-    packets = scapy.rdpcap(pcap)
-    for packet in packets:
-        sport = packet[scapy_layers.UDP].sport
-        dport = packet[scapy_layers.UDP].dport
-        if (sport == 5060 or dport == 5060):
-            print(packet.load)
+    return scapy.rdpcap(pcap)
+#     for packet in packets:
+#         sport = packet[scapy_layers.UDP].sport
+#         dport = packet[scapy_layers.UDP].dport
+#         if (sport == 5060 or dport == 5060):
+#             print(packet.load)
