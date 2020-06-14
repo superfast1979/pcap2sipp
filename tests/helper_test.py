@@ -5,6 +5,7 @@ Created on 5 giu 2020
 '''
 import unittest
 from context import helper
+import pytest
 
 try:
     # python 3.4+ should use builtin unittest.mock not mock package
@@ -83,7 +84,8 @@ class Test(unittest.TestCase):
             helper.checkArgs(args)
         except:
             self.fail("no exception expected")
-            
+
+    @pytest.mark.skip(reason="does not run on linux")
     def test_parsePcap_typical(self):
         helper.parsePcap("./example.pcap")
             
