@@ -33,7 +33,7 @@ class Test(unittest.TestCase):
         self.assertEqual(se.exception.code, 2)
     
     def test_handleArguments_complete_args(self):
-        testargs = ["pcap2sipp", "pippo.pcap", "/tmp", "138.132.1.1", "1.1.1.1"]
+        testargs = ["pcap2sipp", "pippo.pcap", "/tmp", "g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186"]
         with patch('sys.argv', testargs):
             try:
                 args = helper.handleArguments()
@@ -41,8 +41,7 @@ class Test(unittest.TestCase):
                 pytest.fail("no exception expected")
         self.assertEqual(args.pcap, "pippo.pcap")
         self.assertEqual(args.path, "/tmp")
-        self.assertEqual(args.src, "138.132.1.1")
-        self.assertEqual(args.dst, "1.1.1.1")
+        self.assertEqual(args.callid, "g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186")
     
     @patch('os.path.isfile')
     def test_checkPcap_pcap_not_found(self, mock_os_is_file):
@@ -58,15 +57,15 @@ class Test(unittest.TestCase):
             helper.checkPath('/tmsrsc/')
         self.assertEqual(str(e.exception), "path not found")
 
-    def test_checkIp_src_is_not_valid_ipv4(self):
-        with self.assertRaises(Exception) as e:
-            helper.checkIp("1.0.1.2.3")
-        self.assertEqual(str(e.exception), "1.0.1.2.3 not a valid ip")
-
-    def test_checkIp_dst_is_not_valid_ipv4(self):
-        with self.assertRaises(Exception) as e:
-            helper.checkIp("1.0.1.2.4")
-        self.assertEqual(str(e.exception), "1.0.1.2.4 not a valid ip")
+#     def test_checkIp_client_is_not_valid_ipv4(self):
+#         with self.assertRaises(Exception) as e:
+#             helper.checkIp("1.0.1.2.3")
+#         self.assertEqual(str(e.exception), "1.0.1.2.3 not a valid ip")
+# 
+#     def test_checkIp_server_is_not_valid_ipv4(self):
+#         with self.assertRaises(Exception) as e:
+#             helper.checkIp("1.0.1.2.4")
+#         self.assertEqual(str(e.exception), "1.0.1.2.4 not a valid ip")
 
     @patch('os.path.isdir')
     @patch('os.path.isfile')
@@ -84,7 +83,10 @@ class Test(unittest.TestCase):
             helper.checkArgs(args)
         except:
             self.fail("no exception expected")
-
+            
+    def test_parsePcap_typical(self):
+        helper.parsePcap("./example.pcap")
+            
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

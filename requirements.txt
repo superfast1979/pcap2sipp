@@ -1,3 +1,4 @@
 IPy
+scapy
 mock
 pytest
