@@ -6,7 +6,7 @@
 # pcap2sipp
 Simple purpose: translate pcap sip messages to sipp call flow.
 
-Read from a pcap file all sip messages between two peers, identified from ip_src and ip_dst parameters and then it generates two sipp xml files, typically named client_scenario.xml and server_scenario.xml
+Read from a pcap file all sip messages included in a sip session, identified by callid and then it generates two sipp xml files, typically named client_scenario.xml and server_scenario.xml
 
 
 Table of Contents
@@ -29,7 +29,7 @@ pcap2sipp:
 
 Usage
 ------------
-python /path/to/pcap2sipp/pcap2sipp.py pcap /path/to/pcap_file.pcap path /path/to/sipp_files/ src 138.132.111.49 dst 138.132.112.79
+python /path/to/pcap2sipp/pcap2sipp.py /path/to/pcap_file.pcap /dir/to/sipp_files/ g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186
 
 License
 -------
