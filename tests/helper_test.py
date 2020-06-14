@@ -85,10 +85,5 @@ class Test(unittest.TestCase):
         except:
             self.fail("no exception expected")
 
-    @pytest.mark.skip(reason="does not run on linux")
-    def test_parsePcap_typical(self):
-        helper.parsePcap("./example.pcap")
-            
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

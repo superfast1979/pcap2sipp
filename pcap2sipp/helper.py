@@ -2,8 +2,6 @@ import argparse
 import os
 import sys
 from IPy import IP as IPADDRESS
-import scapy.all as scapy
-import scapy.layers.inet as scapy_layers
 
 def handleArguments():
     parser = argparse.ArgumentParser(prog="pcap2sipp.py", description="pcap file to sipp scenarios")
@@ -31,10 +29,3 @@ def checkArgs(args):
     checkPath(args['path'])
     checkPcap(args['pcap'])
 
-def parsePcap(pcap):
-    return scapy.rdpcap(pcap)
-#     for packet in packets:
-#         sport = packet[scapy_layers.UDP].sport
-#         dport = packet[scapy_layers.UDP].dport
-#         if (sport == 5060 or dport == 5060):
-#             print(packet.load)
