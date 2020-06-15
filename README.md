@@ -1,5 +1,5 @@
 [![Build status](https://api.travis-ci.org/superfast1979/pcap2sipp.svg?branch=master)](https://travis-ci.org/superfast1979)
-[![Python version support](https://img.shields.io/badge/python-2.7%20%7C%203.8-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Python version support](https://img.shields.io/badge/python-2.7%20%7C%203.4%20%7C%203.5%20%7C%203.6%20%7C%203.7%20%7C%203.8-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![codecov.io](https://codecov.io/gh/superfast1979/pcap2sipp/coverage.svg?branch=master)](https://codecov.io/gh/superfast1979/pcap2sipp) 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
