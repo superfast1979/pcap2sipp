@@ -1,7 +1,8 @@
 import helper 
+import pcap_helper
 
 if __name__ == '__main__':
     args = helper.handleArguments()
     helper.checkArgs(vars(args))
-    pcap_parsed = helper.parsePcap(args.pcap)
-    helper.pcapHandling(pcap_parsed)
+    packets = pcap_helper.parsePcap(args.pcap)
+    pcap_helper.pcapHandler(packets, args.callid)
