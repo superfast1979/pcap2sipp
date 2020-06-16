@@ -26,7 +26,7 @@ def getClientServerIpFromFirstPacket(packet):
 
 def assertValidPackets(callid, howManyPackets):
     if howManyPackets == 0:
-        print "Call-Id: {} not in pcap".format(callid)
+        print("Call-Id: {} not in pcap".format(callid))
         exit(0)
 
 def pcapHandler(packets, callid):
