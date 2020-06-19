@@ -97,8 +97,20 @@ class Test(unittest.TestCase):
         client, server = pcap_helper.getClientServerDataFrom(tcp_packet)
         self.assertEqual(client.ip, "127.0.0.2")
         self.assertEqual(client.port, 5050)
+        self.assertEqual(client.protocol, scapy_layers.TCP)
         self.assertEqual(server.ip, "127.0.0.5")
         self.assertEqual(server.port, 5010)
+        self.assertEqual(server.protocol, scapy_layers.TCP)
+        
+    def test_getClientServerDataFrom_when_UDP(self):
+        tcp_packet = scapy_layers.IP(src="127.0.0.2",dst="127.0.0.5")/scapy_layers.UDP(sport=5050,dport=5010)
+        client, server = pcap_helper.getClientServerDataFrom(tcp_packet)
+        self.assertEqual(client.ip, "127.0.0.2")
+        self.assertEqual(client.port, 5050)
+        self.assertEqual(client.protocol, scapy_layers.UDP)
+        self.assertEqual(server.ip, "127.0.0.5")
+        self.assertEqual(server.port, 5010)
+        self.assertEqual(server.protocol, scapy_layers.UDP)
         
     def test_getSipCallFlowFrom_when_simpleScenario(self):
         a=scapy_layers.IP()/scapy_layers.UDP()/"OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
