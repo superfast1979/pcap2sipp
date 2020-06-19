@@ -2,7 +2,6 @@ import scapy.all as scapy
 import scapy.layers.inet as scapy_layers
 import re
 from collections import namedtuple
-from __builtin__ import False
 from pickle import FALSE
 
 PeerData = namedtuple("PeerData", "ip port protocol")
