@@ -69,6 +69,7 @@ def getSipCallFlowFrom(filteredPackets, client):
     for packet in filteredPackets:
         direction = getDirectionFor(packet, client)
         callFlow.append(PacketInfo(packet, direction))
+    return callFlow
 
 def pcapHandler(packets, callid):
     filteredPackets, howManyPackets = filterPacketsByCallid(packets, callid)

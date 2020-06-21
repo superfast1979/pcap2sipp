@@ -126,11 +126,18 @@ class Test(unittest.TestCase):
         self.assertEqual(pcap_helper.SERVER_TO_CLIENT, direction)
         
     def test_getSipCallFlowFrom_when_simpleScenario(self):
-        a = scapy_layers.IP() / scapy_layers.UDP() / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
-        b = scapy_layers.IP() / scapy_layers.UDP() / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: h000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
+        a = scapy_layers.IP(src="127.0.0.2", dst="127.0.0.5") / scapy_layers.UDP(sport=5050, dport=5010) / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
+        b = scapy_layers.IP(src="127.0.0.5", dst="127.0.0.2") / scapy_layers.UDP(sport=5010, dport=5050) / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: h000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
         packets = [a, b]
-        client = pcap_helper.PeerData(ip="1.1.1.", port=5040, protocol=scapy_layers.UDP)
+        client = pcap_helper.PeerData(ip="127.0.0.2", port=5050, protocol=scapy_layers.UDP)
+        
         callFlow = pcap_helper.getSipCallFlowFrom(packets, client)
+
+        self.assertEqual(2, len(callFlow))
+        firstPacketInfo = pcap_helper.PacketInfo(a, pcap_helper.CLIENT_TO_SERVER)
+        self.assertEqual(firstPacketInfo, callFlow[0])
+        secondPacketInfo = pcap_helper.PacketInfo(b, pcap_helper.SERVER_TO_CLIENT)
+        self.assertEqual(secondPacketInfo, callFlow[1])
 
     @pytest.mark.skip(reason="does not run on linux")
     def test_pcapHandler_typical(self):
