@@ -140,19 +140,19 @@ class Test(unittest.TestCase):
         self.assertEqual(secondPacketInfo, callFlow[1])
 
     @pytest.mark.skip(reason="does not run on linux")
-    def test_pcapHandler_typical(self):
+    def test_packetsHandler_typical(self):
         a = scapy_layers.IP() / scapy_layers.UDP() / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
         b = scapy_layers.IP() / scapy_layers.UDP() / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: h000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
         c = [a, b]
-        pcap_helper.pcapHandler(c, "g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186")
+        pcap_helper.packetsHandler(c, "g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186")
         
     @pytest.mark.skip(reason="does not run on linux")
-    def test_pcapHandler_when_NoPacketsMatched(self):
+    def test_packetsHandler_when_NoPacketsMatched(self):
         a = scapy_layers.IP() / scapy_layers.UDP() / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
         b = scapy_layers.IP() / scapy_layers.UDP() / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: h000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
         c = [a, b]
         with self.assertRaises(SystemExit) as se:
-            pcap_helper.pcapHandler(c, "sdas0q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186")
+            pcap_helper.packetsHandler(c, "sdas0q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186")
         self.assertEqual(se.exception.code, 0)
 
         

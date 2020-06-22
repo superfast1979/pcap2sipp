@@ -71,8 +71,12 @@ def getSipCallFlowFrom(filteredPackets, client):
         callFlow.append(PacketInfo(packet, direction))
     return callFlow
 
-def pcapHandler(packets, callid):
+def packetsHandler(packets, callid):
     filteredPackets, howManyPackets = filterPacketsByCallid(packets, callid)
     assertValidPackets(callid, howManyPackets)
     client, server = getClientServerDataFrom(filteredPackets[0])
     callFlow = getSipCallFlowFrom(filteredPackets, client)
+    
+def pcapHandler(pcap, callid):
+    packets = parsePcap(pcap)
+    callFlow = packetsHandler(packets, callid)
