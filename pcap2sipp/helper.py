@@ -1,7 +1,5 @@
 import argparse
 import os
-import sys
-from IPy import IP as IPADDRESS
 
 def handleArguments():
     parser = argparse.ArgumentParser(prog="pcap2sipp.py", description="pcap file to sipp scenarios")
@@ -19,12 +17,6 @@ def checkPcap(pcap):
     if not os.path.isdir(pcap):
         raise Exception("pcap not found")
     
-# def checkIp(ip):
-#     try:
-#         IPADDRESS.IP(ip)
-#     except:
-#         raise Exception("%s not a valid ip" % (ip))
-
 def checkArgs(args):
     checkPath(args['path'])
     checkPcap(args['pcap'])
