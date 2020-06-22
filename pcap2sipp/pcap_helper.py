@@ -76,7 +76,9 @@ def packetsHandler(packets, callid):
     assertValidPackets(callid, howManyPackets)
     client, server = getClientServerDataFrom(filteredPackets[0])
     callFlow = getSipCallFlowFrom(filteredPackets, client)
+    return callFlow
     
 def pcapHandler(pcap, callid):
     packets = parsePcap(pcap)
     callFlow = packetsHandler(packets, callid)
+    return callFlow
