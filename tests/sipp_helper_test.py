@@ -33,12 +33,12 @@ class Test(unittest.TestCase):
     @tempdir()
     def test_writeScenarioHeader_when_typical(self, dir):
         sipp_helper.writeScenarioHeader(dir.path,'client_scenario.xml')
-        compare(dir.read('client_scenario.xml'), '<?xml version="1.0" encoding="ISO-8859-1"?>\n<scenario name="client_scenario.xml">\n',show_whitespace=True)
+        compare(dir.read('client_scenario.xml'), b'<?xml version="1.0" encoding="ISO-8859-1"?>\n<scenario name="client_scenario.xml">\n',show_whitespace=True)
         
     @tempdir()
     def test_writeScenarioFooter_when_typical(self, dir):
         sipp_helper.writeScenarioFooter(dir.path,'client_scenario.xml')
-        compare(dir.read('client_scenario.xml'), '  <ResponseTimeRepartition value="10, 20, 30, 40, 50, 100, 150, 200"/>\n  <CallLengthRepartition value="10, 50, 100, 500, 1000, 5000, 10000"/>\n</scenario>\n',show_whitespace=True)
+        compare(dir.read('client_scenario.xml'), b'  <ResponseTimeRepartition value="10, 20, 30, 40, 50, 100, 150, 200"/>\n  <CallLengthRepartition value="10, 50, 100, 500, 1000, 5000, 10000"/>\n</scenario>\n',show_whitespace=True)
 
 if __name__ == "__main__":
     unittest.main()
