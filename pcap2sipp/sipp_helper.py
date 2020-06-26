@@ -3,7 +3,7 @@ import os
 def writeScenarioHeader(path, file):
     with open(os.path.join(path,file), "wb") as scenario:
         scenario.write(bytes(b'<?xml version="1.0" encoding="ISO-8859-1"?>\n'))
-        scenario.write(bytes(b'<scenario name="{}">\n'.format(file)))
+        scenario.write(bytes(b'<scenario name="%s">\n' % (file)))
         
 def writeScenarioFooter(path, file):
     with open(os.path.join(path, file), "a+b") as scenario:
