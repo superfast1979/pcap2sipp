@@ -6,12 +6,6 @@ Created on 5 giu 2020
 import unittest
 from context import pcap2sipp
 
-try:
-    # python 3.4+ should use builtin unittest.mock not mock package
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
-    
 class Test(unittest.TestCase):
 
     def setUp(self):

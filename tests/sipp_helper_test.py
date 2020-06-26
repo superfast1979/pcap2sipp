@@ -2,7 +2,16 @@ import unittest
 from context import sipp_helper
 from context import pcap_helper
 import scapy.layers.inet as scapy_layers
+from string import Template
+from testfixtures import tempdir, compare
+import pytest
 
+try:
+    # python 3.4+ should use builtin unittest.mock not mock package
+    from unittest.mock import patch
+except ImportError:
+    from mock import patch
+    
 class Test(unittest.TestCase):
 
     def setUp(self):
@@ -16,8 +25,20 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
+    @pytest.mark.skip(reason="does not run on linux")
     def test_sippHandler_when_typical(self):
-        sipp_helper.sippHandler(self.callFlow, "/tmp/")
+        pass
+#         sipp_helper.sippHandler(self.callFlow, "./")
+
+    @tempdir()
+    def test_writeScenarioHeader_when_typical(self, dir):
+        sipp_helper.writeScenarioHeader(dir.path,'client_scenario.xml')
+        compare(dir.read('client_scenario.xml'), '<?xml version="1.0" encoding="ISO-8859-1"?>\n<scenario name="client_scenario.xml">\n',show_whitespace=True)
+        
+    @tempdir()
+    def test_writeScenarioFooter_when_typical(self, dir):
+        sipp_helper.writeScenarioFooter(dir.path,'client_scenario.xml')
+        compare(dir.read('client_scenario.xml'), '  <ResponseTimeRepartition value="10, 20, 30, 40, 50, 100, 150, 200"/>\n  <CallLengthRepartition value="10, 50, 100, 500, 1000, 5000, 10000"/>\n</scenario>\n',show_whitespace=True)
 
 if __name__ == "__main__":
     unittest.main()
