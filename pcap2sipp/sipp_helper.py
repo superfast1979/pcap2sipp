@@ -1,4 +1,5 @@
 import os
+import settings
 
 def writeScenarioHeader(path, file):
     with open(os.path.join(path,file), "wb") as scenario:
@@ -13,6 +14,9 @@ def writeScenarioFooter(path, file):
         
 def sippHandler(callFlowFilteredByCallid, path):
     writeScenarioHeader(path, "client_scenario.xml")
+    for packetInfo in callFlowFilteredByCallid:
+        if packetInfo.direction == settings.CLIENT_TO_SERVER:
+            print "CLIENT_TO_SERVER"
     writeScenarioFooter(path, "client_scenario.xml")
     writeScenarioHeader(path, "server_scenario.xml")
     writeScenarioFooter(path, "server_scenario.xml")

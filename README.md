@@ -6,8 +6,8 @@
 # pcap2sipp
 Simple purpose: translate pcap sip messages to sipp call flow.
 
-Read from a pcap file all sip messages included in a sip session, identified by callid and then it generates two sipp xml files, typically named client_scenario.xml and server_scenario.xml
-
+Read from a pcap file all sip messages included in a sip session, identified by callid and then it generates two sipp xml files, typically named client_scenario.xml and server_scenario.xml.
+The content of those files is the replica of all messages sent and received by the client or the server, as CDATA content. 
 
 Table of Contents
 -----------------

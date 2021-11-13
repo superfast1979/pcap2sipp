@@ -11,3 +11,5 @@ import pcap2sipp
 import helper
 import pcap_helper
 import sipp_helper
+import settings
+settings.init()
