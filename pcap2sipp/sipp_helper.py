@@ -1,6 +1,5 @@
 import os
 import settings
-from __builtin__ import True
 
 def writeScenarioHeader(path, file):
     with open(os.path.join(path,file), "wb") as scenario:
