@@ -38,8 +38,7 @@ def writeSendMessageCommon(path, file, sipMsg):
         scenario.write(bytes(b'  <pause milliseconds="50"/>\n\n'))
         scenario.write(bytes(b'  <send>\n'))
         scenario.write(bytes(b'      <![CDATA[\n'))
-        sipMsgFormatted = "{}\n".format(sipMsg)
-        scenario.write(bytes(sipMsgFormatted.encode()))
+        scenario.write(bytes(b'{}\n').format(sipMsg))
         scenario.write(bytes(b'      ]]>\n'))
         scenario.write(bytes(b'  </send>\n\n'))
         
@@ -53,15 +52,13 @@ def writeSendMessageServer(path, file, sipMsg):
 def writeRecvMessageRequest(path, file, method):
     with open(os.path.join(path, file), "a+b") as scenario:
         if method == "invite":
-            sipMsgFormatted = '  <recv request="{}" rrs="true" crlf="true"/>\n\n'.format(method)
+            scenario.write(bytes(b'  <recv request="{}" rrs="true" crlf="true"/>\n\n'.format(method)))
         else:
-            sipMsgFormatted = '  <recv request="{}"/>\n\n'.format(method)
-        scenario.write(bytes(sipMsgFormatted))
+            scenario.write(bytes(b'  <recv request="{}"/>\n\n'.format(method)))
             
 def writeRecvMessageResponse(path, file, response):
     with open(os.path.join(path, file), "a+b") as scenario:
-        sipMsgFormatted = '  <recv response="{}"/>\n\n'.format(response)
-        scenario.write(bytes(sipMsgFormatted))
+        scenario.write(bytes(b'  <recv response="{}"/>\n\n'.format(response)))
         
 def isResponse(firstLine):
     if firstLine.startswith("sip/2.0"):
