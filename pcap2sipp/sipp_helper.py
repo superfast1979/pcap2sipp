@@ -1,6 +1,6 @@
 import os
 import settings
-
+import sys
 
 def replaceHeaderSippForServer(sipMsg):
     lines_modified = []
@@ -37,12 +37,19 @@ def writeScenarioFooter(path, file):
         scenario.write(bytes(b'</scenario>\n'))
 
 
+def bytes_encoding(strings):
+    if sys.version_info[0] == 3:
+        return bytes(strings, encoding='utf8')
+    else:
+        return bytes(strings)
+
+
 def writeSendMessageCommon(path, file, sipMsg):
     with open(os.path.join(path, file), "a+b") as scenario:
         scenario.write(bytes(b'  <pause milliseconds="50"/>\n\n'))
         scenario.write(bytes(b'  <send>\n'))
         scenario.write(bytes(b'      <![CDATA[\n'))
-        sipMsg = bytes(sipMsg)
+        sipMsg = bytes_encoding(sipMsg)
         scenario.write(bytes(b'' + sipMsg + '\n'))
         scenario.write(bytes(b'      ]]>\n'))
         scenario.write(bytes(b'  </send>\n\n'))
@@ -59,7 +66,7 @@ def writeSendMessageServer(path, file, sipMsg):
         
 def writeRecvMessageRequest(path, file, method):
     with open(os.path.join(path, file), "a+b") as scenario:
-        method = bytes(method)
+        method = bytes_encoding(method)
         if method == "invite":
             scenario.write(bytes(b'  <recv request="' + method + b'" rrs="true" crlf="true"/>\n\n'))
         else:
@@ -68,7 +75,7 @@ def writeRecvMessageRequest(path, file, method):
             
 def writeRecvMessageResponse(path, file, response):
     with open(os.path.join(path, file), "a+b") as scenario:
-        response = bytes(response)
+        response = bytes_encoding(response)
         scenario.write(bytes(b'  <recv response="' + response + b'"/>\n\n'))
 
         
