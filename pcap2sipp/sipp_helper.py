@@ -49,8 +49,8 @@ def writeSendMessageCommon(path, file, sipMsg):
         scenario.write(bytes(b'  <pause milliseconds="50"/>\n\n'))
         scenario.write(bytes(b'  <send>\n'))
         scenario.write(bytes(b'      <![CDATA[\n'))
-        sipMsg = bytes_encoding(sipMsg)
-        scenario.write(bytes(b'' + sipMsg + '\n'))
+        sipMsg_encoded = bytes_encoding(sipMsg)
+        scenario.write(bytes(b'' + sipMsg_encoded + '\n'))
         scenario.write(bytes(b'      ]]>\n'))
         scenario.write(bytes(b'  </send>\n\n'))
 
@@ -66,17 +66,17 @@ def writeSendMessageServer(path, file, sipMsg):
         
 def writeRecvMessageRequest(path, file, method):
     with open(os.path.join(path, file), "a+b") as scenario:
-        method = bytes_encoding(method)
+        method_encoded = bytes_encoding(method)
         if method == "invite":
-            scenario.write(bytes(b'  <recv request="' + method + b'" rrs="true" crlf="true"/>\n\n'))
+            scenario.write(bytes(b'  <recv request="' + method_encoded + b'" rrs="true" crlf="true"/>\n\n'))
         else:
-            scenario.write(bytes(b'  <recv request="' + method + b'"/>\n\n'))
+            scenario.write(bytes(b'  <recv request="' + method_encoded + b'"/>\n\n'))
 
             
 def writeRecvMessageResponse(path, file, response):
     with open(os.path.join(path, file), "a+b") as scenario:
-        response = bytes_encoding(response)
-        scenario.write(bytes(b'  <recv response="' + response + b'"/>\n\n'))
+        response_encoded = bytes_encoding(response)
+        scenario.write(bytes(b'  <recv response="' + response_encoded + b'"/>\n\n'))
 
         
 def isResponse(firstLine):
