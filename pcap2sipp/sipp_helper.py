@@ -65,15 +65,12 @@ def isResponse(firstLine):
         return True
     return False
 
-REQUEST = 1
-RESPONSE = 2
-
 def parseFirstLineFrom(sipMsg):
     lines = sipMsg.split("\r\n")
     if isResponse(lines[0]):
-        return RESPONSE, lines[0].split(" ")[1]
+        return settings.RESPONSE, lines[0].split(" ")[1]
     else:
-        return REQUEST, lines[0].split(" ")[0]
+        return settings.REQUEST, lines[0].split(" ")[0]
     
 def sippHandler(callFlowFilteredByCallid, path):
     writeScenarioHeader(path, "client_scenario.xml")
@@ -84,13 +81,13 @@ def sippHandler(callFlowFilteredByCallid, path):
         direction = packetInfo.direction
         if direction == settings.CLIENT_TO_SERVER:
             writeSendMessageClient(path, "client_scenario.xml", sipMsg)
-            if messageType == REQUEST:
+            if messageType == settings.REQUEST:
                 writeRecvMessageRequest(path, "server_scenario.xml", method_or_response)
             else:
                 writeRecvMessageResponse(path, "server_scenario.xml", method_or_response)
         else:
             writeSendMessageServer(path, "server_scenario.xml", sipMsg)
-            if messageType == REQUEST:
+            if messageType == settings.REQUEST:
                 writeRecvMessageRequest(path, "client_scenario.xml", method_or_response)
             else:
                 writeRecvMessageResponse(path, "client_scenario.xml", method_or_response)
