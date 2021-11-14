@@ -31,6 +31,23 @@ class Test(unittest.TestCase):
         pass
 #         sipp_helper.sippHandler(self.callFlow, "./")
 
+    def test_replaceHeaderSippForServer_when_typical(self):
+        packet = scapy_layers.UDP() / "INVITE sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nContact: sip:contact@192.168.100.1\r\nCSeq: 14707 INVITE\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
+        sipMsg = packet.load.lower().decode('utf-8')
+        sipMsg = sipp_helper.replaceHeaderSippForServer(sipMsg)
+        self.assertEqual(-1, sipMsg.find("via:"))
+        self.assertEqual(-1, sipMsg.find("call-id:"))
+        self.assertEqual(-1, sipMsg.find("from:"))
+        self.assertEqual(-1, sipMsg.find("to:"))
+        self.assertEqual(-1, sipMsg.find("cseq:"))
+        self.assertEqual(-1, sipMsg.find("contact:"))
+        
+        self.assertNotEqual(-1, sipMsg.find("[last_Call-ID:]"))
+        self.assertNotEqual(-1, sipMsg.find("[last_From:]"))
+        self.assertNotEqual(-1, sipMsg.find("[last_CSeq:]"))
+        self.assertNotEqual(-1, sipMsg.find("[last_To:];tag=[call_number]"))
+        self.assertNotEqual(-1, sipMsg.find("Contact: <sip:[local_ip]:[local_port];transport=[transport]>"))
+
     @tempdir()
     def test_writeScenarioHeader_when_typical(self, dir):
         sipp_helper.writeScenarioHeader(dir.path,'client_scenario.xml')
