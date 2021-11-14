@@ -2,11 +2,9 @@ import os
 import settings
 
 def replaceHeaderSippForServer(sipMsg):
-    print("replaceHeaderSippForServer")
     lines_modified = []
     lines = sipMsg.splitlines(False)
     for line in lines:
-        print("line: {}".format(line))
         if line.startswith("via:"):
             line = "[last_Via:]"
         if line.startswith("call-id:"):
