@@ -1,6 +1,7 @@
 import os
 import settings
 
+
 def replaceHeaderSippForServer(sipMsg):
     lines_modified = []
     lines = sipMsg.splitlines(False)
@@ -22,10 +23,12 @@ def replaceHeaderSippForServer(sipMsg):
         lines_modified.append(line)
     return "\r\n".join(lines_modified)
 
+
 def writeScenarioHeader(path, file):
-    with open(os.path.join(path,file), "wb") as scenario:
+    with open(os.path.join(path, file), "wb") as scenario:
         scenario.write(bytes(b'<?xml version="1.0" encoding="ISO-8859-1"?>\n'))
         scenario.write(bytes(b'<scenario name="scenario">\n'))
+
         
 def writeScenarioFooter(path, file):
     with open(os.path.join(path, file), "a+b") as scenario:
@@ -33,37 +36,47 @@ def writeScenarioFooter(path, file):
         scenario.write(bytes(b'  <CallLengthRepartition value="10, 50, 100, 500, 1000, 5000, 10000"/>\n'))
         scenario.write(bytes(b'</scenario>\n'))
 
+
 def writeSendMessageCommon(path, file, sipMsg):
     with open(os.path.join(path, file), "a+b") as scenario:
         scenario.write(bytes(b'  <pause milliseconds="50"/>\n\n'))
         scenario.write(bytes(b'  <send>\n'))
         scenario.write(bytes(b'      <![CDATA[\n'))
-        scenario.write(bytes(b'{}\n').format(sipMsg))
+        sipMsg = bytes(sipMsg)
+        scenario.write(bytes(b'' + sipMsg + '\n'))
         scenario.write(bytes(b'      ]]>\n'))
         scenario.write(bytes(b'  </send>\n\n'))
+
         
 def writeSendMessageClient(path, file, sipMsg):
     writeSendMessageCommon(path, file, sipMsg)
 
+
 def writeSendMessageServer(path, file, sipMsg):
     sipMsg = replaceHeaderSippForServer(sipMsg)
     writeSendMessageCommon(path, file, sipMsg)
+
         
 def writeRecvMessageRequest(path, file, method):
     with open(os.path.join(path, file), "a+b") as scenario:
+        method = bytes(method)
         if method == "invite":
-            scenario.write(bytes(b'  <recv request="{}" rrs="true" crlf="true"/>\n\n'.format(method)))
+            scenario.write(bytes(b'  <recv request="' + method + b'" rrs="true" crlf="true"/>\n\n'))
         else:
-            scenario.write(bytes(b'  <recv request="{}"/>\n\n'.format(method)))
+            scenario.write(bytes(b'  <recv request="' + method + b'"/>\n\n'))
+
             
 def writeRecvMessageResponse(path, file, response):
     with open(os.path.join(path, file), "a+b") as scenario:
-        scenario.write(bytes(b'  <recv response="{}"/>\n\n'.format(response)))
+        response = bytes(response)
+        scenario.write(bytes(b'  <recv response="' + response + b'"/>\n\n'))
+
         
 def isResponse(firstLine):
     if firstLine.startswith("sip/2.0"):
         return True
     return False
+
 
 def parseFirstLineFrom(sipMsg):
     lines = sipMsg.split("\r\n")
@@ -71,6 +84,7 @@ def parseFirstLineFrom(sipMsg):
         return settings.RESPONSE, lines[0].split(" ")[1]
     else:
         return settings.REQUEST, lines[0].split(" ")[0]
+
     
 def sippHandler(callFlowFilteredByCallid, path):
     writeScenarioHeader(path, "client_scenario.xml")
