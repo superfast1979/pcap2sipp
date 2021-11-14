@@ -34,8 +34,8 @@ def writeScenarioFooter(path, file):
         scenario.write(bytes(b'  <ResponseTimeRepartition value="10, 20, 30, 40, 50, 100, 150, 200"/>\n'))
         scenario.write(bytes(b'  <CallLengthRepartition value="10, 50, 100, 500, 1000, 5000, 10000"/>\n'))
         scenario.write(bytes(b'</scenario>\n'))
-        
-def writeSendMessageClient(path, file, sipMsg):
+
+def writeSendMessageCommon(path, file, sipMsg):
     with open(os.path.join(path, file), "a+b") as scenario:
         scenario.write(bytes(b'  <pause milliseconds="50"/>\n\n'))
         scenario.write(bytes(b'  <send>\n'))
@@ -43,16 +43,13 @@ def writeSendMessageClient(path, file, sipMsg):
         scenario.write(bytes(b'{}\n').format(sipMsg))
         scenario.write(bytes(b'      ]]>\n'))
         scenario.write(bytes(b'  </send>\n\n'))
+        
+def writeSendMessageClient(path, file, sipMsg):
+    writeSendMessageCommon(path, file, sipMsg)
 
 def writeSendMessageServer(path, file, sipMsg):
     sipMsg = replaceHeaderSippForServer(sipMsg)
-    with open(os.path.join(path, file), "a+b") as scenario:
-        scenario.write(bytes(b'  <pause milliseconds="50"/>\n\n'))
-        scenario.write(bytes(b'  <send>\n'))
-        scenario.write(bytes(b'      <![CDATA[\n'))
-        scenario.write(bytes(b'{}\n').format(sipMsg))
-        scenario.write(bytes(b'      ]]>\n'))
-        scenario.write(bytes(b'  </send>\n\n'))
+    writeSendMessageCommon(path, file, sipMsg)
         
 def writeRecvMessageRequest(path, file, method):
     with open(os.path.join(path, file), "a+b") as scenario:
