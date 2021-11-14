@@ -4,10 +4,32 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # pcap2sipp
-Simple purpose: translate pcap sip messages to sipp call flow.
+Simple purpose: translate pcap sip session to sipp call flow.
 
-Read from a pcap file all sip messages included in a sip session, identified by callid and then it generates two sipp xml files, typically named client_scenario.xml and server_scenario.xml.
+Read from a pcap file all sip messages included in a sip session, identified by callid, and then it generates two sipp xml files, named client_scenario.xml and server_scenario.xml.
 The content of those files is the replica of all messages sent and received by the client or the server, as CDATA content. 
+
+Every send message in sipp scenarios is always delayed by a pause of 50 milliseconds, you can decide to remove the pause or change the value.
+
+For the server scenario, the following sip headers are completely replaced by sipp well known keywords:
+
+via is replaced by [last_Via:]
+
+call-id is replaced by [last_Call-ID:]
+
+from is replaced by [last_From:]
+
+cseq is replaced by [last_CSeq:]
+
+to is replaced by [last_To:];tag=[call_number]
+
+record-route is replaced by [last_Record-route:]
+
+contact is replaced by Contact: <sip:[local_ip]:[local_port];transport=[transport]>
+
+
+
+
 
 Table of Contents
 -----------------
