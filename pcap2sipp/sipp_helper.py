@@ -39,7 +39,7 @@ def writeSendMessageCommon(path, file, sipMsg):
         scenario.write(bytes(b'  <send>\n'))
         scenario.write(bytes(b'      <![CDATA[\n'))
         sipMsgFormatted = "{}\n".format(sipMsg)
-        scenario.write(bytes(sipMsgFormatted))
+        scenario.write(bytes(sipMsgFormatted.encode()))
         scenario.write(bytes(b'      ]]>\n'))
         scenario.write(bytes(b'  </send>\n\n'))
         
