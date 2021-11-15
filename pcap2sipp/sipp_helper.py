@@ -2,6 +2,7 @@ import os
 import settings
 import sys
 
+
 def replaceHeaderSippForServer(sipMsg):
     lines_modified = []
     lines = sipMsg.splitlines(False)
@@ -21,7 +22,10 @@ def replaceHeaderSippForServer(sipMsg):
         if line.startswith("contact:"):
             line = "Contact: <sip:[local_ip]:[local_port];transport=[transport]>"
         lines_modified.append(line)
-    return "\r\n".join(lines_modified)
+    formatted_lines_modified = "\r\n".join(lines_modified)
+    # Add final \r\n
+    formatted_lines_modified = formatted_lines_modified + "\r\n"
+    return formatted_lines_modified
 
 
 def writeScenarioHeader(path, file):
@@ -92,31 +96,37 @@ def parseFirstLineFrom(sipMsg):
     else:
         return settings.REQUEST, lines[0].split(" ")[0]
 
-    
-
 
 def getSipMsgAndDirection(packetInfo):
     sipMsg = packetInfo.packet.load.lower().decode('utf-8')
     direction = packetInfo.direction
     return sipMsg, direction
 
+def writePacketClientToServer(path, sipMsg, messageType, method_or_response):
+    writeSendMessageClient(path, "client_scenario.xml", sipMsg)
+    if messageType == settings.REQUEST:
+        writeRecvMessageRequest(path, "server_scenario.xml", method_or_response)
+    else:
+        writeRecvMessageResponse(path, "server_scenario.xml", method_or_response)
+
+def writePacketServerToClient(path, sipMsg, messageType, method_or_response):
+        writeSendMessageServer(path, "server_scenario.xml", sipMsg)
+        if messageType == settings.REQUEST:
+            writeRecvMessageRequest(path, "client_scenario.xml", method_or_response)
+        else:
+            writeRecvMessageResponse(path, "client_scenario.xml", method_or_response)
+
+''' TODO TEST '''  
 def writePacketInScenarios(path, packetInfo):
     
     sipMsg, direction = getSipMsgAndDirection(packetInfo)
     
     messageType, method_or_response = parseFirstLineFrom(sipMsg)
     if direction == settings.CLIENT_TO_SERVER:
-        writeSendMessageClient(path, "client_scenario.xml", sipMsg)
-        if messageType == settings.REQUEST:
-            writeRecvMessageRequest(path, "server_scenario.xml", method_or_response)
-        else:
-            writeRecvMessageResponse(path, "server_scenario.xml", method_or_response)
+        writePacketClientToServer(path, sipMsg, messageType, method_or_response)
     else:
-        writeSendMessageServer(path, "server_scenario.xml", sipMsg)
-        if messageType == settings.REQUEST:
-            writeRecvMessageRequest(path, "client_scenario.xml", method_or_response)
-        else:
-            writeRecvMessageResponse(path, "client_scenario.xml", method_or_response)
+        writePacketServerToClient(path, sipMsg, messageType, method_or_response)
+
 
 def sippHandler(callFlowFilteredByCallid, path):
     writeScenarioHeader(path, "client_scenario.xml")
