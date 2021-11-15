@@ -7,6 +7,7 @@ from string import Template
 from testfixtures import tempdir, compare
 import pytest
 
+
 try:
     # python 3.4+ should use builtin unittest.mock not mock package
     from unittest.mock import patch
@@ -19,8 +20,8 @@ class Test(unittest.TestCase):
     def setUp(self):
         a = scapy_layers.IP(src="127.0.0.2", dst="127.0.0.5") / scapy_layers.UDP(sport=5050, dport=5010) / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
         b = scapy_layers.IP(src="127.0.0.5", dst="127.0.0.2") / scapy_layers.UDP(sport=5010, dport=5050) / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: h000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
-        firstPacketInfo = pcap_helper.PacketInfo(a, settings.CLIENT_TO_SERVER)
-        secondPacketInfo = pcap_helper.PacketInfo(b, settings.SERVER_TO_CLIENT)
+        firstPacketInfo = settings.PacketInfo(a, settings.CLIENT_TO_SERVER)
+        secondPacketInfo = settings.PacketInfo(b, settings.SERVER_TO_CLIENT)
         self.callFlow = [firstPacketInfo, secondPacketInfo]
         pass
 
@@ -47,6 +48,13 @@ class Test(unittest.TestCase):
         value, method = sipp_helper.parseFirstLineFrom("sip/2.0 100 trying\r\nvia: sip/2.0/udp 10.252.47.107:5060;branch=z9hg4bkdtv49tkbcc37nimia53bvq9dt5\r\nto: <sip:+390289279987@fastweb.it;user=phone>\r\n")
         self.assertEqual(settings.RESPONSE, value)
         self.assertEqual("100", method)
+        
+    def test_getSipMsgAndDirection_when_typical(self):
+        packet = scapy_layers.UDP() / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
+        packetInfo = settings.PacketInfo(packet, settings.CLIENT_TO_SERVER)
+        sipMsg, direction = sipp_helper.getSipMsgAndDirection(packetInfo)
+        self.assertEqual(settings.CLIENT_TO_SERVER, direction)
+        self.assertEqual("options sip:fw-nms-2:5060 sip/2.0\r\nvia: sip/2.0/udp 10.252.47.186:5060;branch=z9hg4bk0g04430050bgj18o80j1\r\nto: sip:ping@fw-nms-2\r\nfrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\ncall-id: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\ncseq: 14707 options\r\nmax-forwards: 0\r\ncontent-length: 0\r\n\r\n", sipMsg)
 
     def test_replaceHeaderSippForServer_when_typical(self):
         packet = scapy_layers.UDP() / "INVITE sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nRecord-Route: sip:138.132.1.2\r\nContact: sip:contact@192.168.100.1\r\nCSeq: 14707 INVITE\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"

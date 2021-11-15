@@ -1,12 +1,7 @@
 import scapy.all as scapy
 import scapy.layers.inet as scapy_layers
 import re
-from collections import namedtuple
-from pickle import FALSE
 import settings
-
-PeerData = namedtuple("PeerData", "ip port protocol")
-PacketInfo = namedtuple("PacketInfo", "packet direction")
 
 def parsePcap(pcap):
     return scapy.rdpcap(pcap)
@@ -42,8 +37,8 @@ def getClientServerDataFrom(firstPacket):
     clientIp, serverIp = getClientServerIpFrom(firstPacket[0])
     protocol = getClientServerProtocolFrom(firstPacket[0])
     clientPort, serverPort = getClientServerPortFrom(firstPacket[0], protocol)
-    client = PeerData(ip=clientIp, port=clientPort, protocol=protocol)
-    server = PeerData(ip=serverIp, port=serverPort, protocol=protocol)
+    client = settings.PeerData(ip=clientIp, port=clientPort, protocol=protocol)
+    server = settings.PeerData(ip=serverIp, port=serverPort, protocol=protocol)
     return client, server
 
 def assertValidPackets(callid, howManyPackets):
@@ -66,7 +61,7 @@ def getSipCallFlowFrom(filteredPackets, client):
     callFlow = []
     for packet in filteredPackets:
         direction = getDirectionFor(packet, client)
-        callFlow.append(PacketInfo(packet, direction))
+        callFlow.append(settings.PacketInfo(packet, direction))
     return callFlow
 
 def packetsHandler(packets, callid):

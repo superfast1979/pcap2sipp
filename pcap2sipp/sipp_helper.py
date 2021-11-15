@@ -93,25 +93,36 @@ def parseFirstLineFrom(sipMsg):
         return settings.REQUEST, lines[0].split(" ")[0]
 
     
+
+
+def getSipMsgAndDirection(packetInfo):
+    sipMsg = packetInfo.packet.load.lower().decode('utf-8')
+    direction = packetInfo.direction
+    return sipMsg, direction
+
+def writePacketInScenarios(path, packetInfo):
+    
+    sipMsg, direction = getSipMsgAndDirection(packetInfo)
+    
+    messageType, method_or_response = parseFirstLineFrom(sipMsg)
+    if direction == settings.CLIENT_TO_SERVER:
+        writeSendMessageClient(path, "client_scenario.xml", sipMsg)
+        if messageType == settings.REQUEST:
+            writeRecvMessageRequest(path, "server_scenario.xml", method_or_response)
+        else:
+            writeRecvMessageResponse(path, "server_scenario.xml", method_or_response)
+    else:
+        writeSendMessageServer(path, "server_scenario.xml", sipMsg)
+        if messageType == settings.REQUEST:
+            writeRecvMessageRequest(path, "client_scenario.xml", method_or_response)
+        else:
+            writeRecvMessageResponse(path, "client_scenario.xml", method_or_response)
+
 def sippHandler(callFlowFilteredByCallid, path):
     writeScenarioHeader(path, "client_scenario.xml")
     writeScenarioHeader(path, "server_scenario.xml")
     for packetInfo in callFlowFilteredByCallid:
-        sipMsg = packetInfo.packet.load.lower().decode('utf-8')
-        messageType, method_or_response = parseFirstLineFrom(sipMsg)
-        direction = packetInfo.direction
-        if direction == settings.CLIENT_TO_SERVER:
-            writeSendMessageClient(path, "client_scenario.xml", sipMsg)
-            if messageType == settings.REQUEST:
-                writeRecvMessageRequest(path, "server_scenario.xml", method_or_response)
-            else:
-                writeRecvMessageResponse(path, "server_scenario.xml", method_or_response)
-        else:
-            writeSendMessageServer(path, "server_scenario.xml", sipMsg)
-            if messageType == settings.REQUEST:
-                writeRecvMessageRequest(path, "client_scenario.xml", method_or_response)
-            else:
-                writeRecvMessageResponse(path, "client_scenario.xml", method_or_response)
+        writePacketInScenarios(path, packetInfo)
     writeScenarioFooter(path, "client_scenario.xml")
     writeScenarioFooter(path, "server_scenario.xml")
     pass

@@ -115,25 +115,25 @@ class Test(unittest.TestCase):
         
     def test_getDirectionFor_when_CLIENT_TO_SERVER(self):
         packet = scapy_layers.IP(src="127.0.0.2", dst="127.0.0.5") / scapy_layers.UDP(sport=5050, dport=5010)
-        client = pcap_helper.PeerData(ip="127.0.0.2", port=5050, protocol=scapy_layers.UDP)
+        client = settings.PeerData(ip="127.0.0.2", port=5050, protocol=scapy_layers.UDP)
         direction = pcap_helper.getDirectionFor(packet, client)
         self.assertEqual(settings.CLIENT_TO_SERVER, direction)
         
     def test_getDirectionFor_when_SERVER_TO_CLIENT(self):
         packet = scapy_layers.IP(src="127.0.0.2", dst="127.0.0.5") / scapy_layers.TCP(sport=5050, dport=5010)
-        client = pcap_helper.PeerData(ip="127.0.0.5", port=5010, protocol=scapy_layers.TCP)
+        client = settings.PeerData(ip="127.0.0.5", port=5010, protocol=scapy_layers.TCP)
         direction = pcap_helper.getDirectionFor(packet, client)
         self.assertEqual(settings.SERVER_TO_CLIENT, direction)
         
     def test_getDirectionFor_when_SERVER_TO_CLIENT_for_different_port(self):
         packet = scapy_layers.IP(src="127.0.0.2", dst="127.0.0.5") / scapy_layers.TCP(sport=5050, dport=5010)
-        client = pcap_helper.PeerData(ip="127.0.0.2", port=5010, protocol=scapy_layers.TCP)
+        client = settings.PeerData(ip="127.0.0.2", port=5010, protocol=scapy_layers.TCP)
         direction = pcap_helper.getDirectionFor(packet, client)
         self.assertEqual(settings.SERVER_TO_CLIENT, direction)
         
     def test_getDirectionFor_when_SERVER_TO_CLIENT_for_different_protocol(self):
         packet = scapy_layers.IP(src="127.0.0.2", dst="127.0.0.5") / scapy_layers.TCP(sport=5050, dport=5010)
-        client = pcap_helper.PeerData(ip="127.0.0.2", port=5050, protocol=scapy_layers.UDP)
+        client = settings.PeerData(ip="127.0.0.2", port=5050, protocol=scapy_layers.UDP)
         direction = pcap_helper.getDirectionFor(packet, client)
         self.assertEqual(settings.SERVER_TO_CLIENT, direction)
         
@@ -141,14 +141,14 @@ class Test(unittest.TestCase):
         a = scapy_layers.IP(src="127.0.0.2", dst="127.0.0.5") / scapy_layers.UDP(sport=5050, dport=5010) / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: g000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
         b = scapy_layers.IP(src="127.0.0.5", dst="127.0.0.2") / scapy_layers.UDP(sport=5010, dport=5050) / "OPTIONS sip:Fw-NMS-2:5060 SIP/2.0\r\nVia: SIP/2.0/UDP 10.252.47.186:5060;branch=z9hG4bK0g04430050bgj18o80j1\r\nTo: sip:ping@Fw-NMS-2\r\nFrom: <sip:ping@10.252.47.186>;tag=g000000q5m200-jbe0000\r\nCall-ID: h000000q5m2003tedhjqk9l5i1-jbe0000@10.252.47.186\r\nCSeq: 14707 OPTIONS\r\nMax-Forwards: 0\r\nContent-Length: 0\r\n\r\n"
         packets = [a, b]
-        client = pcap_helper.PeerData(ip="127.0.0.2", port=5050, protocol=scapy_layers.UDP)
+        client = settings.PeerData(ip="127.0.0.2", port=5050, protocol=scapy_layers.UDP)
         
         callFlow = pcap_helper.getSipCallFlowFrom(packets, client)
 
         self.assertEqual(2, len(callFlow))
-        firstPacketInfo = pcap_helper.PacketInfo(a, settings.CLIENT_TO_SERVER)
+        firstPacketInfo = settings.PacketInfo(a, settings.CLIENT_TO_SERVER)
         self.assertEqual(firstPacketInfo, callFlow[0])
-        secondPacketInfo = pcap_helper.PacketInfo(b, settings.SERVER_TO_CLIENT)
+        secondPacketInfo = settings.PacketInfo(b, settings.SERVER_TO_CLIENT)
         self.assertEqual(secondPacketInfo, callFlow[1])
 
     @pytest.mark.skip(reason="does not run on linux")

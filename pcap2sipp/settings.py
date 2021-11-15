@@ -1,3 +1,8 @@
+from collections import namedtuple
+
+PeerData = namedtuple("PeerData", "ip port protocol")
+PacketInfo = namedtuple("PacketInfo", "packet direction")
+
 def init():
     global CLIENT_TO_SERVER
     global SERVER_TO_CLIENT
