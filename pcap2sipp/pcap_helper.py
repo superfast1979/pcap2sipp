@@ -8,7 +8,7 @@ def parsePcap(pcap):
 
 def isCallIdInPacket(packet, callid):
     sipMsg = packet.load.lower().decode('utf-8')
-    return True if re.search(r'\r\ncall-id:.*{}\r\n'.format(callid), sipMsg) else False
+    return True if re.search(r'\r\ncall-id:.*{}.*\r\n'.format(callid), sipMsg) else False
 
 def filterPacketsByCallid(packets, callid):
     filteredPackets = []
