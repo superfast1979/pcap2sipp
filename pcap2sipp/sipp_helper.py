@@ -98,7 +98,7 @@ def parseFirstLineFrom(sipMsg):
 
 
 def getSipMsgAndDirection(packetInfo):
-    sipMsg = packetInfo.packet.load.lower().decode('utf-8')
+    sipMsg = packetInfo.packet.load.decode('utf-8')
     direction = packetInfo.direction
     return sipMsg, direction
 
