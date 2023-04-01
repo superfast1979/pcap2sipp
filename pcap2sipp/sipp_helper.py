@@ -7,19 +7,19 @@ def replaceHeaderSippForServer(sipMsg):
     lines_modified = []
     lines = sipMsg.splitlines(False)
     for line in lines:
-        if line.startswith("via:"):
+        if line.lower().startswith("via:"):
             line = "[last_Via:]"
-        if line.startswith("call-id:"):
+        if line.lower().startswith("call-id:"):
             line = "[last_Call-ID:]"
-        if line.startswith("from:"):
+        if line.lower().startswith("from:"):
             line = "[last_From:]"
-        if line.startswith("cseq:"):
+        if line.lower().startswith("cseq:"):
             line = "[last_CSeq:]"
-        if line.startswith("to:"):
+        if line.lower().startswith("to:"):
             line = "[last_To:];tag=[call_number]"
-        if line.startswith("record-route:"):
+        if line.lower().startswith("record-route:"):
             line = "[last_Record-route:]"
-        if line.startswith("contact:"):
+        if line.lower().startswith("contact:"):
             line = "Contact: <sip:[local_ip]:[local_port];transport=[transport]>"
         lines_modified.append(line)
     formatted_lines_modified = "\r\n".join(lines_modified)
@@ -91,14 +91,16 @@ def isResponse(firstLine):
 
 def parseFirstLineFrom(sipMsg):
     lines = sipMsg.split("\r\n")
-    if isResponse(lines[0]):
-        return settings.RESPONSE, lines[0].split(" ")[1]
+    if isResponse(lines[0].lower()):
+        print(lines[0].lower().split(" ")[1])
+        return settings.RESPONSE, lines[0].lower().split(" ")[1]
     else:
-        return settings.REQUEST, lines[0].split(" ")[0]
+        print(lines[0].lower().split(" ")[0])
+        return settings.REQUEST, lines[0].lower().split(" ")[0]
 
 
 def getSipMsgAndDirection(packetInfo):
-    sipMsg = packetInfo.packet.load.lower().decode('utf-8')
+    sipMsg = packetInfo.packet.load.decode('utf-8')
     direction = packetInfo.direction
     return sipMsg, direction
 
